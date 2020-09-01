@@ -1,4 +1,4 @@
-package main
+package interop
 
 import (
 	"github.com/Hyperledger-TWGC/tjfoc-gm/x509"
@@ -6,7 +6,7 @@ import (
 )
 
 func TestLoadFromPKUGM(t *testing.T) {
-	privKeyPem := ReadFile("privateKey.pku.pem", t)
+	privKeyPem := ReadFile("testdata/privateKey.pku.pem", t)
 	_, err := x509.ReadPrivateKeyFromPem([]byte(privKeyPem), nil)
 	Fatal(err, t)
 }

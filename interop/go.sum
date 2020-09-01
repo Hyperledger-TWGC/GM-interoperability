@@ -1,7 +1,5 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/Hyperledger-TWGC/pku-gm v0.0.0-20200814085431-8ca30c8a6399 h1:98faDYMydT5oF+i1LTfRFznLL0psfu2nEdKYT+PoH/E=
-github.com/Hyperledger-TWGC/pku-gm v0.0.0-20200814085431-8ca30c8a6399/go.mod h1:j9V7pWBTWFEq7NBBzyD+ZqbFRSe1+fO4gpRkIgltn0k=
 github.com/Hyperledger-TWGC/pku-gm v0.0.0-20200831163314-046f8c468eba h1:EwtDVj5LhudLZ6azOBpuydEMhILCZ8EDZ1ylJDjNoWc=
 github.com/Hyperledger-TWGC/pku-gm v0.0.0-20200831163314-046f8c468eba/go.mod h1:j9V7pWBTWFEq7NBBzyD+ZqbFRSe1+fO4gpRkIgltn0k=
 github.com/Hyperledger-TWGC/tjfoc-gm v1.3.3 h1:SyJ2sZM5vqC+WGrxMerSwI3itsSg0sgGY6u76C3txyQ=
