@@ -30,7 +30,7 @@ steps:
     version: $(goVersion)
 - script: cd interop; go mod vendor
 - script: cd pku-gm; go mod vendor
-- script: cd interop; go test pkuExport_test.go; go test tjfocExport_test.go
+- script: cd interop; go test util_test.go pkuExport_test.go tjfocExport_test.go
   displayName: build artifacts
-- script: cd interop; go test pkuImport_test.go; go test tjfocImport_test.go
+- script: cd interop; go test util_test.go pkuImport_test.go; go test tjfocImport_test.go
   displayName: test on loading artifacts 

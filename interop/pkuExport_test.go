@@ -1,4 +1,4 @@
-package main
+package interop
 
 import "github.com/Hyperledger-TWGC/pku-gm/gmssl"
 import "testing"
@@ -14,7 +14,7 @@ func TestPKUSM2KeyPemExport(t *testing.T) {
 
 	pem, err := sm2sk.GetPEM("", "") // no encrypt mode is supported by not encouraged to use with security concern
 	Fatal(err, t)
-	var pemFile = "privateKey.pku.pem"
+	var pemFile = "testdata/privateKey.pku.pem"
 	WriteFile([]byte(pem), pemFile, t)
 
 }
