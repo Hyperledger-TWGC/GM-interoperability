@@ -1,4 +1,4 @@
-package main
+package interop
 
 import (
 	"github.com/Hyperledger-TWGC/tjfoc-gm/sm2"
@@ -11,7 +11,7 @@ func TestTJSM2Pem(t *testing.T) {
 	Fatal(err, t)
 	pemBytes, err := x509.WritePrivateKeytoPem(sm2PrivKey, nil)
 	Fatal(err, t)
-	var pemFile = "privateKey.tjfoc.pem"
+	var pemFile = "testdata/privateKey.tjfoc.pem"
 	WriteFile(pemBytes, pemFile, t)
 
 }
