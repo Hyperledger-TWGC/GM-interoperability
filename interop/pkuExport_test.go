@@ -1,13 +1,9 @@
 package main
 
-import (
-	"github.com/Hyperledger-TWGC/pku-gm/gmssl"
+import "github.com/Hyperledger-TWGC/pku-gm/gmssl"
+import "testing"
 
-	"os"
-	"testing"
-)
-
-func TestSM2KeyPemNoEncrypt(t *testing.T) {
+func TestPKUSM2KeyPemExport(t *testing.T) {
 
 	/* SM2 key pair operations */
 	sm2keygenargs := [][2]string{
@@ -19,13 +15,6 @@ func TestSM2KeyPemNoEncrypt(t *testing.T) {
 	pem, err := sm2sk.GetPEM("", "") // no encrypt mode is supported by not encouraged to use with security concern
 	Fatal(err, t)
 	var pemFile = "privateKey.pku.pem"
-	file, err := os.Create(pemFile)
-	Fatal(err, t)
-	defer func() {
-		err = file.Close()
-		Fatal(err, t)
-	}()
-	_, err = file.Write([]byte(pem))
-	Fatal(err, t)
+	WriteFile([]byte(pem), pemFile, t)
 
 }
