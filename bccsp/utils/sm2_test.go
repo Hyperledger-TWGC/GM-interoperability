@@ -67,7 +67,7 @@ func TestSM2IsLowS(t *testing.T) {
 	assert.True(t, lowS)
 
 	s := new(big.Int)
-	s = s.Set(GetCurveHalfOrdersAtsm2(sm2.P256()))
+	s = s.Set(GetCurveHalfOrdersAtSM2(sm2.P256()))
 
 	lowS, err = SM2IsLowS(&lowLevelPrivateKey.PublicKey, s)
 	assert.NoError(t, err)
@@ -90,7 +90,7 @@ func TestSM2SignatureToLowS(t *testing.T) {
 	assert.NoError(t, err)
 
 	s := new(big.Int)
-	s = s.Set(GetCurveHalfOrdersAtsm2(sm2.P256()))
+	s = s.Set(GetCurveHalfOrdersAtSM2(sm2.P256()))
 	s = s.Add(s, big.NewInt(1))
 
 	lowS, err := SM2IsLowS(&lowLevelPrivateKey.PublicKey, s)

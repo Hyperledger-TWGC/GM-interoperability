@@ -17,9 +17,8 @@ limitations under the License.
 package utils
 
 import (
-	"testing"
-
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestClone(t *testing.T) {

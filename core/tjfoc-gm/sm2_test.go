@@ -9,7 +9,7 @@ import (
 )
 
 func TestSM2(t *testing.T) {
-	priv, err := GenerateKey() // 生成密钥对
+	priv, err := GenerateKey(rand.Reader) // 生成密钥对
 	if err != nil {
 		t.Fatal(err)
 	}
