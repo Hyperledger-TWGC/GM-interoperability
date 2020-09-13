@@ -24,6 +24,8 @@ steps:
   displayName: Clone GMSSL
 - script: cd $(Pipeline.Workspace)/GmSSL; SYSTEM=`uname -s` ./config --prefix=/usr/local/gmssl; make; sudo make install_sw  
   displayName: Config, make and install GMSSL
+- script: cd $(Pipeline.Workspace); git clone https://github.com/Hyperledger-TWGC/java-gm.git
+  displayName: Clone java-gm
 - checkout: self
 - task: GoTool@0
   inputs:
@@ -34,3 +36,5 @@ steps:
   displayName: build artifacts
 - script: cd interop; go test util_test.go pkuImport_test.go tjfocImport_test.go
   displayName: test on loading artifacts 
+- script: DIR=$PWD;cd $(Pipeline.Workspace)/java-gm; gradle build; cp -f $(Pipeline.Workspace)/java-gm/*.pem $DIR/interop; cd $DIR/interop;go test tjjavaImport_test.go
+  displayName: interactWithJava
