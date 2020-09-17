@@ -32,9 +32,9 @@ steps:
     version: $(goVersion)
 - script: cd interop; go mod vendor
 - script: cd pku-gm; go mod vendor
-- script: cd interop; go test util_test.go pkuExport_test.go tjfocExport_test.go
+- script: cd interop; go test util_test.go ccsExport_test.go pkuExport_test.go tjfocExport_test.go
   displayName: build artifacts
 - script: cd interop; go test util_test.go pkuImport_test.go tjfocImport_test.go
   displayName: test on loading artifacts 
-- script: DIR=$PWD;cd $(Pipeline.Workspace)/java-gm; gradle build; cp -f $(Pipeline.Workspace)/java-gm/*.pem $DIR/interop; cd $DIR/interop;go test tjjavaImport_test.go
+- script: DIR=$PWD;cd $(Pipeline.Workspace)/java-gm; gradle build; cp -f $(Pipeline.Workspace)/java-gm/*.pem $DIR/interop/testdata; cd $DIR/interop;go test tjjavaImport_test.go
   displayName: interactWithJava

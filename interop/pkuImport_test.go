@@ -8,4 +8,9 @@ func TestPKUSM2KeyPemImport(t *testing.T) {
 	pemBytes := ReadFile(privKeyPem, t)
 	_, err := gmssl.NewPrivateKeyFromPEM(string(pemBytes), "")
 	Fatal(err, t)
+	var pem2 = "testdata/privateKey.ccs.pem"
+	pemBytes2 := ReadFile(pem2, t)
+	_, err = gmssl.NewPrivateKeyFromPEM(string(pemBytes2), "")
+	Fatal(err, t)
+
 }

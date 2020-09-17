@@ -9,7 +9,7 @@ import (
 )
 
 func TestLoadFromJavaGM(t *testing.T) {
-	privPem, err := ioutil.ReadFile("priv.pem")
+	privPem, err := ioutil.ReadFile("testdata/priv.pem")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -17,7 +17,7 @@ func TestLoadFromJavaGM(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	_, err = x509.ReadCertificateRequestFromPem("pub.pem")
+	_, err = x509.ReadCertificateRequestFromPem("testdata/pub.pem")
 	if err != nil {
 		t.Fatal(err)
 	}
