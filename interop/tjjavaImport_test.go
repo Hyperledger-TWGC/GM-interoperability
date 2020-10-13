@@ -17,7 +17,7 @@ func TestLoadFromJavaGM(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	_, err = x509.ReadCertificateRequestFromPem("testdata/pub.pem")
+	pubkey, err := x509.ReadPublicKeyFromPem("testdata/pub.pem")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -26,8 +26,12 @@ func TestLoadFromJavaGM(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	isok := privKey.PublicKey.Verify(msg, sign)
+	isok := pubkey.Verify(msg, sign)
 	if isok != true {
 		t.Errorf("Failed with verify")
+	}
+	_, err = x509.ReadCertificateRequestFromPem("testdata/req.pem")
+	if err != nil {
+		t.Fatal(err)
 	}
 }
