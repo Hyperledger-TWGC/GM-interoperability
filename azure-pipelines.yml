@@ -70,14 +70,39 @@ jobs:
 
 
   - job:
-    displayName: Java-GM
+    displayName: importFrom-Java-GM
+    strategy:
+      matrix:
+        LTS:
+          goVersion: '1.13'
+        latest:
+          goVersion: '1.14'
     steps:
     - checkout: self
     - task: GoTool@0
       inputs:
-        version: 1.14
+        version: $(goVersion)
     - script: cd interop; go mod vendor
     - script: cd $(Pipeline.Workspace); git clone https://github.com/Hyperledger-TWGC/java-gm.git
       displayName: Clone java-gm
     - script: DIR=$PWD;cd $(Pipeline.Workspace)/java-gm; gradle build; cp -f $(Pipeline.Workspace)/java-gm/*.pem $DIR/interop/testdata; cd $DIR/interop;go test -v util_test.go tjjavaImport_test.go
+      displayName: interactWithJava
+
+  - job:
+    displayName: Java-GM-import
+    strategy:
+      matrix:
+        LTS:
+          goVersion: '1.13'
+        latest:
+          goVersion: '1.14'
+    steps:
+    - checkout: self
+    - task: GoTool@0
+      inputs:
+        version: $(goVersion)
+    - script: cd interop; go mod vendor; go test util_test.go tjjavaExport_test.go
+    - script: cd $(Pipeline.Workspace); git clone https://github.com/Hyperledger-TWGC/java-gm.git
+      displayName: Clone java-gm
+    - script: DIR=$PWD;cd $(Pipeline.Workspace)/java-gm; cp -f $DIR/interop/testdata/*.pem $(Pipeline.Workspace)/java-gm; gradle build;
       displayName: interactWithJava
