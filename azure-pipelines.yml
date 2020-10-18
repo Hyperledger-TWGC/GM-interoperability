@@ -9,32 +9,75 @@ schedules:
 pool:
    vmImage: 'ubuntu-18.04'
 
-strategy:
-  matrix:
-    LTS:
-      goVersion: '1.13'
-    latest:
-      goVersion: '1.14'
-variables:
-- name: LD_LIBRARY_PATH # used for guanzhi/GmSSL
-  value: /usr/local/gmssl/lib
+jobs:
+  - job:
+    displayName: Go-GM-TJ
+    strategy:
+      matrix:
+        LTS:
+          goVersion: '1.13'
+        latest:
+          goVersion: '1.14'
+    variables:
+    - name: LD_LIBRARY_PATH # used for guanzhi/GmSSL
+      value: /usr/local/gmssl/lib
+    steps:
+    - script: cd $(Pipeline.Workspace); git clone https://github.com/guanzhi/GmSSL.git
+      displayName: Clone GMSSL
+    - script: cd $(Pipeline.Workspace)/GmSSL; SYSTEM=`uname -s` ./config --prefix=/usr/local/gmssl; make; sudo make install_sw  
+      displayName: Config, make and install GMSSL
+    - checkout: self
+    - task: GoTool@0
+      inputs:
+        version: $(goVersion)
+    - script: cd interop; go mod vendor
+    - script: cd pku-gm; go mod vendor
+    - script: cd interop; go test -v util_test.go ccsExport_test.go pkuExport_test.go tjfocExport_test.go
+      displayName: build artifacts
+    - script: cd interop; go test -v util_test.go tjfocImportccs_test.go
+      displayName: TJImportCCS
+    - script: cd interop; go test -v util_test.go tjfocImportpku_test.go
+      displayName: TJImportPKU
 
-steps:
-- script: cd $(Pipeline.Workspace); git clone https://github.com/guanzhi/GmSSL.git
-  displayName: Clone GMSSL
-- script: cd $(Pipeline.Workspace)/GmSSL; SYSTEM=`uname -s` ./config --prefix=/usr/local/gmssl; make; sudo make install_sw  
-  displayName: Config, make and install GMSSL
-- script: cd $(Pipeline.Workspace); git clone https://github.com/Hyperledger-TWGC/java-gm.git
-  displayName: Clone java-gm
-- checkout: self
-- task: GoTool@0
-  inputs:
-    version: $(goVersion)
-- script: cd interop; go mod vendor
-- script: cd pku-gm; go mod vendor
-- script: cd interop; go test util_test.go ccsExport_test.go pkuExport_test.go tjfocExport_test.go
-  displayName: build artifacts
-- script: cd interop; go test util_test.go pkuImport_test.go tjfocImport_test.go
-  displayName: test on loading artifacts 
-- script: DIR=$PWD;cd $(Pipeline.Workspace)/java-gm; gradle build; cp -f $(Pipeline.Workspace)/java-gm/*.pem $DIR/interop/testdata; cd $DIR/interop;go test tjjavaImport_test.go
-  displayName: interactWithJava
+  - job:
+    displayName: Go-GM-PKU
+    strategy:
+      matrix:
+        LTS:
+          goVersion: '1.13'
+        latest:
+          goVersion: '1.14'
+    variables:
+    - name: LD_LIBRARY_PATH # used for guanzhi/GmSSL
+      value: /usr/local/gmssl/lib
+    steps:
+    - script: cd $(Pipeline.Workspace); git clone https://github.com/guanzhi/GmSSL.git
+      displayName: Clone GMSSL
+    - script: cd $(Pipeline.Workspace)/GmSSL; SYSTEM=`uname -s` ./config --prefix=/usr/local/gmssl; make; sudo make install_sw  
+      displayName: Config, make and install GMSSL
+    - checkout: self
+    - task: GoTool@0
+      inputs:
+        version: $(goVersion)
+    - script: cd interop; go mod vendor
+    - script: cd pku-gm; go mod vendor
+    - script: cd interop; go test -v util_test.go ccsExport_test.go pkuExport_test.go tjfocExport_test.go
+      displayName: build artifacts
+    - script: cd interop; go test -v util_test.go pkuImporttj_test.go
+      displayName: PKUImportTJ
+    - script: cd interop; go test -v util_test.go pkuImportccs_test.go
+      displayName: PKUImportCCS
+
+
+  - job:
+    displayName: Java-GM
+    steps:
+    - checkout: self
+    - task: GoTool@0
+      inputs:
+        version: 1.14
+    - script: cd interop; go mod vendor
+    - script: cd $(Pipeline.Workspace); git clone https://github.com/Hyperledger-TWGC/java-gm.git
+      displayName: Clone java-gm
+    - script: DIR=$PWD;cd $(Pipeline.Workspace)/java-gm; gradle build; cp -f $(Pipeline.Workspace)/java-gm/*.pem $DIR/interop/testdata; cd $DIR/interop;go test tjjavaImport_test.go
+      displayName: interactWithJava
