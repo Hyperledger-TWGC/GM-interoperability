@@ -1,6 +1,8 @@
 package interop
 
 import (
+	"crypto/x509/pkix"
+
 	"testing"
 
 	"github.com/Hyperledger-TWGC/tjfoc-gm/sm2"
@@ -15,4 +17,24 @@ func TestTJSM2Pem(t *testing.T) {
 	var pemFile = "testdata/privateKey.tjfoc.pem"
 	WriteFile(pemBytes, pemFile, t)
 
+	pemFile = "testdata/priv.pem"
+	WriteFile(pemBytes, pemFile, t)
+
+	pubKey, _ := sm2PrivKey.Public().(*sm2.PublicKey)
+	pemFile = "testdata/pub.pem"
+	pemBytes,err = x509.WritePublicKeyToPem(pubKey)
+	WriteFile(pemBytes, pemFile, t)
+	Fatal(err, t)
+
+	pemFile = "testdata/req.pem"
+	templateReq := &x509.CertificateRequest{
+		Subject: pkix.Name{
+			CommonName:   "test.example.com",
+			Organization: []string{"Test"},
+		},
+		SignatureAlgorithm: x509.SM2WithSM3,
+	}
+	pemBytes,err = x509.CreateCertificateRequestToPem(templateReq, sm2PrivKey)
+	WriteFile(pemBytes, pemFile, t)
+	Fatal(err, t)
 }
