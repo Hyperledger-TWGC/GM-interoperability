@@ -8,6 +8,6 @@
     |  ----  | ----  |
     | github.com/Hyperledger-TWGC/ccs-gm  | master |
     | github.com/Hyperledger-TWGC/pku-gm  | v1.0.1 |
-    | github.com/Hyperledger-TWGC/tjfoc-gm  | v1.3.3 |
+    | github.com/Hyperledger-TWGC/tjfoc-gm  | v1.4.0 |
     | github.com/Hyperledger-TWGC/java-gm  | master |
   	 
