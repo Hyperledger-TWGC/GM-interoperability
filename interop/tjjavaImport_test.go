@@ -2,22 +2,19 @@ package interop
 
 import (
 	"crypto/rand"
-	"io/ioutil"
 	"testing"
 
 	"github.com/Hyperledger-TWGC/tjfoc-gm/x509"
 )
 
 func TestLoadFromJavaGM(t *testing.T) {
-	privPem, err := ioutil.ReadFile("testdata/priv.pem")
+	privKeyPem := ReadFile("testdata/priv.pem", t)
+	privKey, err := x509.ReadPrivateKeyFromPem(privKeyPem, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
-	privKey, err := x509.ReadPrivateKeyFromPem(privPem, nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-	pubkey, err := x509.ReadPublicKeyFromPem("testdata/pub.pem")
+	pubKeyPem := ReadFile("testdata/pub.pem", t)
+	pubkey, err := x509.ReadPublicKeyFromPem(pubKeyPem)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -30,7 +27,8 @@ func TestLoadFromJavaGM(t *testing.T) {
 	if isok != true {
 		t.Errorf("Failed with verify")
 	}
-	_, err = x509.ReadCertificateRequestFromPem("testdata/req.pem")
+	certPem := ReadFile("testdata/req.pem", t)
+	_, err = x509.ReadCertificateRequestFromPem(certPem)
 	if err != nil {
 		t.Fatal(err)
 	}

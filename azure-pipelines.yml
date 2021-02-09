@@ -79,5 +79,5 @@ jobs:
     - script: cd interop; go mod vendor
     - script: cd $(Pipeline.Workspace); git clone https://github.com/Hyperledger-TWGC/java-gm.git
       displayName: Clone java-gm
-    - script: DIR=$PWD;cd $(Pipeline.Workspace)/java-gm; gradle build; cp -f $(Pipeline.Workspace)/java-gm/*.pem $DIR/interop/testdata; cd $DIR/interop;go test tjjavaImport_test.go
+    - script: DIR=$PWD;cd $(Pipeline.Workspace)/java-gm; gradle build; cp -f $(Pipeline.Workspace)/java-gm/*.pem $DIR/interop/testdata; cd $DIR/interop;go test -v util_test.go tjjavaImport_test.go
       displayName: interactWithJava
