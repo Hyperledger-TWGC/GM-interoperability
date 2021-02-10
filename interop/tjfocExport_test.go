@@ -14,19 +14,16 @@ func TestTJSM2Pem(t *testing.T) {
 	Fatal(err, t)
 	pemBytes, err := x509.WritePrivateKeyToPem(sm2PrivKey, nil)
 	Fatal(err, t)
-	var pemFile = "testdata/privateKey.tjfoc.pem"
-	WriteFile(pemBytes, pemFile, t)
-
-	pemFile = "testdata/priv.pem"
+	var pemFile = "testdata/tjfoc/priv.pem"
 	WriteFile(pemBytes, pemFile, t)
 
 	pubKey, _ := sm2PrivKey.Public().(*sm2.PublicKey)
-	pemFile = "testdata/pub.pem"
+	pemFile = "testdata/tjfoc/pub.pem"
 	pemBytes,err = x509.WritePublicKeyToPem(pubKey)
 	WriteFile(pemBytes, pemFile, t)
 	Fatal(err, t)
 
-	pemFile = "testdata/req.pem"
+	pemFile = "testdata/tjfoc/req.pem"
 	templateReq := &x509.CertificateRequest{
 		Subject: pkix.Name{
 			CommonName:   "test.example.com",

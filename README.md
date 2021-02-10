@@ -4,6 +4,7 @@
   
 
 - Current version for each gm libs. At Dec-31-2020
+    
     |  lib   | version  |
     |  ----  | ----  |
     | github.com/Hyperledger-TWGC/ccs-gm  | master |
