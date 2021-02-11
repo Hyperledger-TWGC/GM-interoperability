@@ -11,7 +11,7 @@ pool:
 
 jobs:
   - job:
-    displayName: Go-GM-TJ
+    displayName: SM3
     strategy:
       matrix:
         LTS:
@@ -31,7 +31,30 @@ jobs:
       inputs:
         version: $(goVersion)
     - script: cd interop; go mod vendor
-    - script: cd pku-gm; go mod vendor
+    - script: cd interop; go test -v sm3Interop_test.go
+      displayName: sm3 data interaction check
+
+  - job:
+    displayName: Go-GM-TJKeyImport
+    strategy:
+      matrix:
+        LTS:
+          goVersion: '1.13'
+        latest:
+          goVersion: '1.14'
+    variables:
+    - name: LD_LIBRARY_PATH # used for guanzhi/GmSSL
+      value: /usr/local/gmssl/lib
+    steps:
+    - script: cd $(Pipeline.Workspace); git clone https://github.com/guanzhi/GmSSL.git
+      displayName: Clone GMSSL
+    - script: cd $(Pipeline.Workspace)/GmSSL; SYSTEM=`uname -s` ./config --prefix=/usr/local/gmssl; make; sudo make install_sw  
+      displayName: Config, make and install GMSSL
+    - checkout: self
+    - task: GoTool@0
+      inputs:
+        version: $(goVersion)
+    - script: cd interop; go mod vendor
     - script: cd interop; go test -v util_test.go ccsExport_test.go pkuExport_test.go tjfocExport_test.go
       displayName: build artifacts
     - script: cd interop; go test -v util_test.go tjfocImportccs_test.go
@@ -40,7 +63,7 @@ jobs:
       displayName: TJImportPKU
 
   - job:
-    displayName: Go-GM-PKU
+    displayName: Go-GM-PKUKeyImport
     strategy:
       matrix:
         LTS:
@@ -60,7 +83,6 @@ jobs:
       inputs:
         version: $(goVersion)
     - script: cd interop; go mod vendor
-    - script: cd pku-gm; go mod vendor
     - script: cd interop; go test -v util_test.go ccsExport_test.go pkuExport_test.go tjfocExport_test.go
       displayName: build artifacts
     - script: cd interop; go test -v util_test.go pkuImporttj_test.go
