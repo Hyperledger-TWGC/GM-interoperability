@@ -8,12 +8,12 @@ import (
 )
 
 func TestLoadFromJavaGM(t *testing.T) {
-	privKeyPem := ReadFile("testdata/priv.pem", t)
+	privKeyPem := ReadFile("testdata/java/priv.pem", t)
 	privKey, err := x509.ReadPrivateKeyFromPem(privKeyPem, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
-	pubKeyPem := ReadFile("testdata/pub.pem", t)
+	pubKeyPem := ReadFile("testdata/java/pub.pem", t)
 	pubkey, err := x509.ReadPublicKeyFromPem(pubKeyPem)
 	if err != nil {
 		t.Fatal(err)
@@ -27,7 +27,7 @@ func TestLoadFromJavaGM(t *testing.T) {
 	if isok != true {
 		t.Errorf("Failed with verify")
 	}
-	certPem := ReadFile("testdata/req.pem", t)
+	certPem := ReadFile("testdata/java/req.pem", t)
 	_, err = x509.ReadCertificateRequestFromPem(certPem)
 	if err != nil {
 		t.Fatal(err)

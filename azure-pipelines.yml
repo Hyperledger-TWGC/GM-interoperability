@@ -11,13 +11,7 @@ pool:
 
 jobs:
   - job:
-    displayName: SM3
-    strategy:
-      matrix:
-        LTS:
-          goVersion: '1.13'
-        latest:
-          goVersion: '1.14'
+    displayName: Go-PKU-GM
     variables:
     - name: LD_LIBRARY_PATH # used for guanzhi/GmSSL
       value: /usr/local/gmssl/lib
@@ -29,31 +23,7 @@ jobs:
     - checkout: self
     - task: GoTool@0
       inputs:
-        version: $(goVersion)
-    - script: cd interop; go mod vendor
-    - script: cd interop; go test -v sm3Interop_test.go
-      displayName: sm3 data interaction check
-
-  - job:
-    displayName: Go-GM-TJKeyImport
-    strategy:
-      matrix:
-        LTS:
-          goVersion: '1.13'
-        latest:
-          goVersion: '1.14'
-    variables:
-    - name: LD_LIBRARY_PATH # used for guanzhi/GmSSL
-      value: /usr/local/gmssl/lib
-    steps:
-    - script: cd $(Pipeline.Workspace); git clone https://github.com/guanzhi/GmSSL.git
-      displayName: Clone GMSSL
-    - script: cd $(Pipeline.Workspace)/GmSSL; SYSTEM=`uname -s` ./config --prefix=/usr/local/gmssl; make; sudo make install_sw  
-      displayName: Config, make and install GMSSL
-    - checkout: self
-    - task: GoTool@0
-      inputs:
-        version: $(goVersion)
+        version: 1.15
     - script: cd interop; go mod vendor
     - script: cd interop; go test -v util_test.go ccsExport_test.go pkuExport_test.go tjfocExport_test.go
       displayName: build artifacts
@@ -61,58 +31,32 @@ jobs:
       displayName: TJImportCCS
     - script: cd interop; go test -v util_test.go tjfocImportpku_test.go
       displayName: TJImportPKU
-
-  - job:
-    displayName: Go-GM-PKUKeyImport
-    strategy:
-      matrix:
-        LTS:
-          goVersion: '1.13'
-        latest:
-          goVersion: '1.14'
-    variables:
-    - name: LD_LIBRARY_PATH # used for guanzhi/GmSSL
-      value: /usr/local/gmssl/lib
-    steps:
-    - script: cd $(Pipeline.Workspace); git clone https://github.com/guanzhi/GmSSL.git
-      displayName: Clone GMSSL
-    - script: cd $(Pipeline.Workspace)/GmSSL; SYSTEM=`uname -s` ./config --prefix=/usr/local/gmssl; make; sudo make install_sw  
-      displayName: Config, make and install GMSSL
-    - checkout: self
-    - task: GoTool@0
-      inputs:
-        version: $(goVersion)
-    - script: cd interop; go mod vendor
-    - script: cd interop; go test -v util_test.go ccsExport_test.go pkuExport_test.go tjfocExport_test.go
-      displayName: build artifacts
+    - script: cd interop; go test -v sm3Interop_test.go
+      displayName: sm3 data interaction check
     - script: cd interop; go test -v util_test.go pkuImporttj_test.go
       displayName: PKUImportTJ
     - script: cd interop; go test -v util_test.go pkuImportccs_test.go
       displayName: PKUImportCCS
 
-
   - job:
-    displayName: importFrom-Java-GM
+    displayName: Java-GM
     steps:
     - checkout: self
     - task: GoTool@0
       inputs:
-        version: 1.14
+        version: 1.15
     - script: cd interop; go mod vendor
     - script: cd $(Pipeline.Workspace); git clone https://github.com/Hyperledger-TWGC/java-gm.git
       displayName: Clone java-gm
-    - script: DIR=$PWD;cd $(Pipeline.Workspace)/java-gm; gradle build; cp -f $(Pipeline.Workspace)/java-gm/*.pem $DIR/interop/testdata; cd $DIR/interop;go test -v util_test.go tjjavaImport_test.go
-      displayName: interactWithJava
-
-  - job:
-    displayName: Java-GM-import
-    steps:
-    - checkout: self
-    - task: GoTool@0
-      inputs:
-        version: 1.14
-    - script: cd interop; go mod vendor; go test util_test.go tjfocExport_test.go
-    - script: cd $(Pipeline.Workspace); git clone https://github.com/Hyperledger-TWGC/java-gm.git
-      displayName: Clone java-gm
-    - script: DIR=$PWD;cd $(Pipeline.Workspace)/java-gm; cp -f $DIR/interop/testdata/tjfoc/*.pem $(Pipeline.Workspace)/java-gm; gradle build;
-      displayName: interactWithJava
+    - script: cd interop; go test util_test.go tjfocExport_test.go
+      displayName: build artifacts - tjfoc
+    - script: cd $(Pipeline.Workspace)/java-gm; gradle build; 
+      displayName: build artifacts - java
+    - script: cp -f $(Pipeline.Workspace)/java-gm/*.pem ./interop/testdata/java/;
+      displayName: copy java artifacts to testdata/java
+    - script: cd interop; go test -v util_test.go tjjavaImport_test.go
+      displayName: TJImportJava
+    - script: cp -f ./interop/testdata/tjfoc/*.pem $(Pipeline.Workspace)/java-gm;
+      displayName: copy tjfoc artifacts to java-gm
+    - script: cd $(Pipeline.Workspace)/java-gm;  gradle build;
+      displayName: Java test on imported
