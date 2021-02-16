@@ -33,6 +33,8 @@ jobs:
       displayName: TJImportPKU
     - script: cd interop; go test -v sm3Interop_test.go
       displayName: sm3 data interaction check
+    - script: cd interop; go test -v util_test.go sm2Interop_test.go
+      displayName: sm2 data interaction check
     - script: cd interop; go test -v util_test.go pkuImporttj_test.go
       displayName: PKUImportTJ
     - script: cd interop; go test -v util_test.go pkuImportccs_test.go
