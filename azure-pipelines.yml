@@ -10,8 +10,8 @@ pool:
    vmImage: 'ubuntu-18.04'
 
 jobs:
-  - job:
-    displayName: Go-PKU-GM
+  - job: 
+    displayName: SM3Interop
     variables:
     - name: LD_LIBRARY_PATH # used for guanzhi/GmSSL
       value: /usr/local/gmssl/lib
@@ -25,18 +25,76 @@ jobs:
       inputs:
         version: 1.15
     - script: cd interop; go mod vendor
-    - script: cd interop; go test -v util_test.go ccsExport_test.go pkuExport_test.go tjfocExport_test.go
-      displayName: build artifacts
-    - script: cd interop; go test -v util_test.go tjfocImportccs_test.go
-      displayName: TJImportCCS
-    - script: cd interop; go test -v util_test.go tjfocImportpku_test.go
-      displayName: TJImportPKU
-    - script: cd interop; go test -v sm3Interop_test.go
+    - script: cd interop; go test -v util_test.go sm3Interop_test.go
       displayName: sm3 data interaction check
-    - script: cd interop; go test -v util_test.go pkuImporttj_test.go
-      displayName: PKUImportTJ
-    - script: cd interop; go test -v util_test.go pkuImportccs_test.go
-      displayName: PKUImportCCS
+
+  - job:
+    displayName: SM2Interop
+    strategy:
+      matrix:
+        TJ_CCS_SIGN:
+            SOURCE: 'TJ'
+            TARGET: 'CCS'
+            ACTION: 'SIGN'
+        TJ_CCS_ENCRYPT:
+            SOURCE: 'TJ'
+            TARGET: 'CCS'
+            ACTION: 'ENCRYPT'
+        CCS_TJ_SIGN:
+            SOURCE: 'CCS'
+            TARGET: 'TJ'
+            ACTION: 'SIGN'
+        CCS_TJ_ENCRYPT:
+            SOURCE: 'CCS'
+            TARGET: 'TJ'
+            ACTION: 'ENCRYPT'
+        TJ_PKU_SIGN:
+            SOURCE: 'TJ'
+            TARGET: 'PKU'
+            ACTION: 'SIGN'
+        TJ_PKU_ENCRYPT:
+            SOURCE: 'TJ'
+            TARGET: 'PKU'
+            ACTION: 'ENCRYPT'
+        CCS_PKU_SIGN:
+            SOURCE: 'CCS'
+            TARGET: 'PKU'
+            ACTION: 'SIGN'
+        CCS_PKU_ENCRYPT:
+            SOURCE: 'CCS'
+            TARGET: 'PKU'
+            ACTION: 'ENCRYPT' 
+        PKU_TJ_SIGN:
+            SOURCE: 'PKU'
+            TARGET: 'TJ'
+            ACTION: 'SIGN'
+        PKU_TJ_ENCRYPT:
+            SOURCE: 'PKU'
+            TARGET: 'TJ'
+            ACTION: 'ENCRYPT'
+        PKU_CCS_SIGN:
+            SOURCE: 'PKU'
+            TARGET: 'CCS'
+            ACTION: 'SIGN'
+        PKU_CCS_ENCRYPT:
+            SOURCE: 'PKU'
+            TARGET: 'CCS'
+            ACTION: 'ENCRYPT'
+    variables:
+    - name: LD_LIBRARY_PATH # used for guanzhi/GmSSL
+      value: /usr/local/gmssl/lib
+    steps:
+    - script: cd $(Pipeline.Workspace); git clone https://github.com/guanzhi/GmSSL.git
+      displayName: Clone GMSSL
+    - script: cd $(Pipeline.Workspace)/GmSSL; SYSTEM=`uname -s` ./config --prefix=/usr/local/gmssl; make; sudo make install_sw  
+      displayName: Config, make and install GMSSL
+    - checkout: self
+    - task: GoTool@0
+      inputs:
+        version: 1.15
+    - script: cd interop; go mod vendor
+    - script: cd interop; go test -v util_test.go sm2Interop_test.go tjSM2.go ccsSM2.go pkuSM2.go type.go
+      displayName: sm2 data interaction check
 
   - job:
     displayName: Java-GM
