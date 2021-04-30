@@ -36,8 +36,8 @@ func TestSM2(t *testing.T) {
 	Fatal(err, t)
 	// locd key from target
 	fmt.Println("load key to target lib " + targetDef)
-	if sourceDef == "TJ" {
-		source, err = TJImportKey(privPEM, pubPem)
+	if targetDef == "TJ" {
+		target, err = TJImportKey(privPEM, pubPem)
 		Fatal(err, t)
 	}
 	if targetDef == "CCS" {
