@@ -1,7 +1,7 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/Hyperledger-TWGC/ccs-gm v0.1.2-0.20210202011810-d006f903c43e h1:ZHVaJWg4YzmZbclCTqqiC/KvA/rs6AxUuGswoPYEAzU=
-github.com/Hyperledger-TWGC/ccs-gm v0.1.2-0.20210202011810-d006f903c43e/go.mod h1:NYt3Izjky1wLk/1peAiE6N8dSlvrPhtk8HiNCqzIRPU=
+github.com/Hyperledger-TWGC/ccs-gm v0.1.2-0.20210509122023-bb34670d0124 h1:OA0QvOLU62ckz80GNfjNb4wkZf4BA9f0G4OSCDwHwfE=
+github.com/Hyperledger-TWGC/ccs-gm v0.1.2-0.20210509122023-bb34670d0124/go.mod h1:NYt3Izjky1wLk/1peAiE6N8dSlvrPhtk8HiNCqzIRPU=
 github.com/Hyperledger-TWGC/pku-gm v1.0.1 h1:rrnNTJOiysgwEFuBAycDzsQ2PfEaIR0Kx9drKozhLM8=
 github.com/Hyperledger-TWGC/pku-gm v1.0.1/go.mod h1:j9V7pWBTWFEq7NBBzyD+ZqbFRSe1+fO4gpRkIgltn0k=
 github.com/Hyperledger-TWGC/tjfoc-gm v1.4.0 h1:fYkf2oSzYFLfqnyl3VHW+KIs0lNAYQWjsLMS3v56q7I=
