@@ -20,6 +20,7 @@ func GenerateSM2Instance(sourceDef string) (SM2, error) {
 	return nil, nil
 }
 
+//todo lib
 func ReadFile(filename string) ([]byte, error) {
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -28,6 +29,7 @@ func ReadFile(filename string) ([]byte, error) {
 	return content, nil
 }
 
+//todo lib
 func LoadFromPriPem(file string) (SM2, error) {
 	privKeyPem, err := ReadFile(file)
 	if err != nil {
