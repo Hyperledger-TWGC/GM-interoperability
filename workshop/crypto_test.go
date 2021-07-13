@@ -7,6 +7,7 @@ import (
 )
 
 var source, priv, pub workshop.SM2
+var SM4Key  workshop.SM4
 var priFile = "priv.pem"
 var pubFile = "pub.pem"
 var msg = []byte("2021-07-03 13:44:10")
@@ -18,6 +19,7 @@ var _ = Describe("Crypto", func() {
 		Expect(err).NotTo(HaveOccurred())
 		err = source.SaveFile(priFile, pubFile)
 		Expect(err).NotTo(HaveOccurred())
+		SM4Key, err = workshop.GenerateSM4Instance(workshop.TJ)
 	})
 	// general function for degist hash, sign
 	It("it should able to complete degist via sm3 then sign, verify", func() {
@@ -41,11 +43,13 @@ var _ = Describe("Crypto", func() {
 		Expect(decrypted).To(Equal(msg))
 	})
 	// general function for sm4 encrypt
-	It("it should able to complete sm4 encrypt", func() {
-
+	It("it should able to complete sm4 encrypt and decrypt", func() {
+		encrypted, err := SM4Key.Encrypt(msg,"ecb")
+		Expect(err).NotTo(HaveOccurred())
+		decrypted, err := SM4Key.Decrypt(encrypted,"ecb")
+		Expect(err).NotTo(HaveOccurred())
+		Expect(encrypted).NotTo(Equal(msg))
+		Expect(decrypted).To(Equal(msg))
 	})
-	// general function for sm4 decrypt
-	It("it should able to complete sm4 decrypt", func() {
-
-	})
+	 
 })

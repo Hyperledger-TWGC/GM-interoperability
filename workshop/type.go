@@ -8,3 +8,7 @@ type SM2 interface {
 	ExportKey() (privPEM []byte, pubPEM []byte, err error)
 	SaveFile(priFile, pubFile string) error
 }
+type SM4 interface{
+	Encrypt(msg []byte,mode string)([]byte,error)
+	Decrypt(encrypted []byte,mode string)([]byte,error)
+}

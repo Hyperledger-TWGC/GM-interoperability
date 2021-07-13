@@ -19,7 +19,15 @@ func GenerateSM2Instance(sourceDef string) (SM2, error) {
 	}
 	return nil, nil
 }
-
+func  GenerateSM4Instance(sourceDef string) (SM4, error) {
+	if sourceDef == TJ {
+		return NewTJSM4()
+	}
+	if sourceDef == CCS {
+		return NewCCSSM4()
+	}
+	return nil, nil
+}
 //todo lib
 func ReadFile(filename string) ([]byte, error) {
 	content, err := ioutil.ReadFile(filename)
