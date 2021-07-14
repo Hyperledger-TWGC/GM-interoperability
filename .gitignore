@@ -2,3 +2,6 @@
 vendor
 .idea
 .vscode
+workspace.code-workspace
+workshop/client/client
+workshop/server/server

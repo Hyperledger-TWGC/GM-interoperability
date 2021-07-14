@@ -118,3 +118,13 @@ jobs:
       displayName: copy tjfoc artifacts to java-gm
     - script: cd $(Pipeline.Workspace)/java-gm;  gradle build;
       displayName: Java test on imported
+
+  - job:
+    displayName: Workshop
+    steps:
+    - checkout: self
+    - task: GoTool@0
+      inputs:
+        version: 1.15
+    - script: cd workshop;go test -v ./... --cover
+      displayName: Test for workshop
