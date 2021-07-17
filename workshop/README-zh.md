@@ -23,7 +23,7 @@
 ### terminal 2
 `./client ./ sign 127.0.0.1:8080`
 `./client ./ decrypt 127.0.0.1:8080`
-
+`./client ./ sm4 127.0.0.1:8080`
 ## 设计
 - server/client restapi接口
 - 通用load key，sign，verify接口

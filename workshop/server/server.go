@@ -26,6 +26,8 @@ func main() {
 	ws := new(restful.WebService)
 	ws.Route(ws.POST("/verify").To(verify))
 	ws.Route(ws.GET("/encrypt").To(encrypt))
+	ws.Route(ws.GET("/sm4").To(sm4))
+
 	restful.Add(ws)
 	Key, err = workshop.LoadFromPubPem(path + pubFile)
 	if err != nil {
@@ -69,6 +71,22 @@ func encrypt(req *restful.Request, resp *restful.Response) {
 	var msg = []byte(today_str)
 	encodedMsg := hex.EncodeToString(msg)
 	data, _ := Key.Encrypt(msg)
+	encodedStr := hex.EncodeToString(data)
+	//log.Println(encodedStr)
+	//todo string data is not human-readable
+	io.WriteString(resp, `{"msg" : "`+string(encodedMsg)+`", "encrypt": "`+string(encodedStr)+`"}`)
+}
+
+func sm4(req *restful.Request, resp *restful.Response) {
+	log.Println("sm4 encrypt")
+	SM4Key, _ := workshop.GenerateSM4Instance(workshop.TJ)
+	now := time.Now()
+	year, month, day := now.Date()
+	today_str := fmt.Sprintf("%d-%d-%d 00:00:00", year, month, day)
+	var msg = []byte(today_str)
+	data, _ := SM4Key.Encrypt(msg, "ecb")
+
+	encodedMsg := hex.EncodeToString(msg)
 	encodedStr := hex.EncodeToString(data)
 	//log.Println(encodedStr)
 	//todo string data is not human-readable

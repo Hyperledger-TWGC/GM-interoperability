@@ -58,7 +58,33 @@ func main() {
 		}
 		originalmsg, _ := hex.DecodeString(data.Msg)
 		fmt.Println(string(decrypted) == string(originalmsg))
+	}
+	if os.Args[2] == "sm4" {
+		fmt.Println("sm4 decrypt")
+		httpRequest, _ := http.NewRequest("GET", "http://"+os.Args[3]+"/sm4", nil)
+		httpRequest.Header.Set("Content-Type", "application/json")
+		client := http.Client{}
+		response, _ := client.Do(httpRequest)
+		defer response.Body.Close()
+		body, _ := ioutil.ReadAll(response.Body)
+		//fmt.Println(string(body))
+		var data Encrypt
+		err := json.Unmarshal(body, &data)
+		if err != nil {
+			fmt.Println(err)
+		}
+		SM4Key, _ := workshop.GenerateSM4Instance(workshop.TJ)
 
+		test, err := hex.DecodeString(data.Encrypt)
+		if err != nil {
+			fmt.Println(err)
+		}
+		decrypted, err := SM4Key.Decrypt(test, "ecb")
+		if err != nil {
+			fmt.Println(err)
+		}
+		originalmsg, _ := hex.DecodeString(data.Msg)
+		fmt.Println(string(decrypted) == string(originalmsg))
 	}
 	if os.Args[2] == "sign" {
 		fmt.Println("sign")

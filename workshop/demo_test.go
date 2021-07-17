@@ -96,6 +96,20 @@ var _ = Describe("Server", func() {
 
 			Eventually(clientSession.Out).Should(Say("true"))
 		})
-		It("sm4 interact", func() {})
+		It("sm4 interact", func() {
+			server_cmd := exec.Command(serverBin, tmpDir)
+			serverSession, err = gexec.Start(server_cmd, nil, nil)
+			Expect(err).NotTo(HaveOccurred())
+			Eventually(serverSession.Out).Should(Say("start server"))
+
+			client_cmd := exec.Command(clientBin, tmpDir, "sm4", "127.0.0.1:8080")
+			clientSession, err = gexec.Start(client_cmd, nil, nil)
+			Expect(err).NotTo(HaveOccurred())
+			Eventually(clientSession.Out).Should(Say("sm4 decrypt"))
+
+			//Eventually(serverSession.Out).Should(Say("verify"))
+
+			Eventually(clientSession.Out).Should(Say("true"))
+		})
 	})
 })
