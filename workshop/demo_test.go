@@ -39,11 +39,11 @@ var _ = Describe("Server", func() {
 	})
 
 	AfterEach(func() {
-		if serverSession != nil && serverSession.ExitCode() == -1 {
+		if serverSession != nil {
 			serverSession.Kill()
 		}
 
-		if clientSession != nil && clientSession.ExitCode() == -1 {
+		if clientSession != nil {
 			clientSession.Kill()
 		}
 	})
@@ -66,10 +66,22 @@ var _ = Describe("Server", func() {
 
 	// client send request via private key vai ccs
 	Context("server client interact", func() {
-		It("sign interact", func() {})
-		It("verfiy interact", func() {})
-		It("encrypt interact", func() {})
-		It("decrypt interact", func() {})
+		It("verfiy & sign interact", func() {
+			server_cmd := exec.Command(serverBin, tmpDir)
+			serverSession, err = gexec.Start(server_cmd, nil, nil)
+			Expect(err).NotTo(HaveOccurred())
+			Eventually(serverSession.Out).Should(Say("start server"))
+
+			client_cmd := exec.Command(clientBin, tmpDir, "sign", "127.0.0.1:8080")
+			clientSession, err = gexec.Start(client_cmd, nil, nil)
+			Expect(err).NotTo(HaveOccurred())
+			Eventually(clientSession.Out).Should(Say("sign"))
+
+			//Eventually(serverSession.Out).Should(Say("verify"))
+
+			Eventually(clientSession.Out).Should(Say("true"))
+		})
+		It("decrypt & encrypt interact", func() {})
 		It("sm4 interact", func() {})
 	})
 })
