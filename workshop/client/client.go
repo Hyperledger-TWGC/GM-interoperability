@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/Hyperledger-TWGC/fabric-gm-plugins/workshop"
 )
@@ -36,7 +37,10 @@ func main() {
 		fmt.Println("sign")
 		priv, _ := workshop.LoadFromPriPem(path + priFile)
 		// generate original data
-		var msg = []byte("2021-07-03 13:44:10")
+		now := time.Now()
+		year, month, day := now.Date()
+		today_str := fmt.Sprintf("%d-%d-%d 00:00:00", year, month, day)
+		var msg = []byte(today_str)
 		encodedMsg := hex.EncodeToString(msg)
 
 		// do signature
