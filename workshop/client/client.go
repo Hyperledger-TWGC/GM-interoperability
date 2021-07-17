@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -16,6 +17,11 @@ var priFile = "priv.pem"
 var pubFile = "pub.pem"
 var path = "./"
 
+type Encrypt struct {
+	Msg     string `json:"msg"`
+	Encrypt string `json:"encrypt"`
+}
+
 func main() {
 	// args 1 as key store path
 	// args 2 as method
@@ -28,10 +34,31 @@ func main() {
 	}
 	if os.Args[2] == "decrypt" {
 		fmt.Println("decrypt")
+		httpRequest, _ := http.NewRequest("GET", "http://"+os.Args[3]+"/encrypt", nil)
+		httpRequest.Header.Set("Content-Type", "application/json")
+		client := http.Client{}
+		response, _ := client.Do(httpRequest)
+		defer response.Body.Close()
+		body, _ := ioutil.ReadAll(response.Body)
+		//fmt.Println(string(body))
+		var data Encrypt
+		err := json.Unmarshal(body, &data)
+		if err != nil {
+			fmt.Println(err)
+		}
 		priv, _ := workshop.LoadFromPriPem(path + priFile)
-		test, _ := hex.DecodeString(os.Args[3])
-		decrypted, _ := priv.Decrypt(test)
-		fmt.Println(string(decrypted))
+
+		test, err := hex.DecodeString(data.Encrypt)
+		if err != nil {
+			fmt.Println(err)
+		}
+		decrypted, err := priv.Decrypt(test)
+		if err != nil {
+			fmt.Println(err)
+		}
+		originalmsg, _ := hex.DecodeString(data.Msg)
+		fmt.Println(string(decrypted) == string(originalmsg))
+
 	}
 	if os.Args[2] == "sign" {
 		fmt.Println("sign")
