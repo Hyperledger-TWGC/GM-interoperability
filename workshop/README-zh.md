@@ -8,10 +8,22 @@
 
 ## 步骤
 1. 编译项目
+### terminal 1
+`cd server && go build .`
+### terminal 2
+`cd client && go build .`
 1. 生成密钥并配置
+### terminal 2
+`./client ./ generate`
+`mv pub.pem ../server`
 1. 启动服务器
+### terminal 1
+`./server ./`
 1. 通过命令行发送请求
-
+### terminal 2
+`./client ./ sign 127.0.0.1:8080`
+`./client ./ decrypt 127.0.0.1:8080`
+`./client ./ sm4 127.0.0.1:8080`
 ## 设计
 - server/client restapi接口
 - 通用load key，sign，verify接口
