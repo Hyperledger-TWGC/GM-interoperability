@@ -128,3 +128,13 @@ jobs:
         version: 1.15
     - script: cd workshop;go test -v ./... --cover
       displayName: Test for workshop
+
+  - job:
+    displayName: SampleBCCSPImplementation
+    steps:
+    - checkout: self
+    - task: GoTool@0
+      inputs:
+        version: 1.15
+    - script: cd bccsp;go test -v ./... --cover
+      displayName: Sample Impl for BCCSP
