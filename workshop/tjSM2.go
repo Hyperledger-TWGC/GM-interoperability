@@ -5,7 +5,6 @@ import (
 	"os"
 
 	tj "github.com/Hyperledger-TWGC/tjfoc-gm/sm2"
-	"github.com/Hyperledger-TWGC/tjfoc-gm/sm3"
 	tjx509 "github.com/Hyperledger-TWGC/tjfoc-gm/x509"
 )
 
@@ -60,8 +59,8 @@ func (instance *TJSM2) Decrypt(encrypted []byte) ([]byte, error) {
 }
 
 func (instance *TJSM2) Sign(msg []byte) ([]byte, error) {
-	tj_digest := sm3.Sm3Sum(msg)
-	sign, err := instance.PrivateKey.Sign(rand.Reader, tj_digest, nil) // 签名
+	
+	sign, err := instance.PrivateKey.Sign(rand.Reader, msg, nil) // 签名
 	if err != nil {
 		return nil, err
 	}
@@ -69,8 +68,8 @@ func (instance *TJSM2) Sign(msg []byte) ([]byte, error) {
 }
 
 func (instance *TJSM2) Verify(msg []byte, sign []byte) bool {
-	tj_digest := sm3.Sm3Sum(msg)
-	ok := instance.PublicKey.Verify(tj_digest, sign) // 公钥验证
+	
+	ok := instance.PublicKey.Verify(msg, sign) // 公钥验证
 	return ok
 }
 
