@@ -1,4 +1,4 @@
-# workshop demo
+# 国密workshop
 这个demo旨在启动一个国密的服务器（公钥）并且通过命令行来执行对应的操作从而体验非对称加密过程中的签名，验证，加密，解密过程。
 
 ## 项目结构
@@ -28,3 +28,7 @@
 - server/client restapi接口
 - 通用load key，sign，verify接口
 - 底层基础库实现（支撑）
+
+## 相关资源
+- [课件1](./国密1030.pdf)
+- [课件2](./国密workshop.pdf)
