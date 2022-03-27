@@ -1,0 +1,15 @@
+name: workshop code
+on:
+  pull_request:
+  push:
+  schedule:
+    - cron: '0 0 * * 3' # https://crontab.guru/#0_0_*_*_3
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@main
+      with:
+          go-version: 1.16
+    - run: cd workshop;go test -v ./... --cover

@@ -1,0 +1,29 @@
+name: java gm
+on:
+  pull_request:
+  push:
+  schedule:
+    - cron: '0 0 * * 3' # https://crontab.guru/#0_0_*_*_3
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@main
+      with:
+          go-version: 1.16
+    - run: cd interop; go mod vendor
+    - run: git clone https://github.com/Hyperledger-TWGC/java-gm.git
+      name: Clone java-gm
+    - run: cd interop; go test util_test.go tjfocExport_test.go
+      name: build artifacts - tjfoc
+    - run: cd java-gm; gradle build; 
+      name: build artifacts - java
+    - run: cp -f java-gm/*.pem ./interop/testdata/java/;
+      name: copy java artifacts to testdata/java
+    - run: cd interop; go test -v util_test.go tjjavaImport_test.go
+      name: TJImportJava
+    - run: cp -f ./interop/testdata/tjfoc/*.pem ./java-gm;
+      name: copy tjfoc artifacts to java-gm
+    - run: cd ./java-gm;  gradle build;
+      name: Java test on imported
