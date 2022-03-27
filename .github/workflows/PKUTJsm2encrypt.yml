@@ -1,0 +1,24 @@
+name: PKUtjencrypt
+on:
+  pull_request:
+  push:
+env:
+  LD_LIBRARY_PATH: /usr/local/gmssl/lib
+  SOURCE: PKU
+  TARGET: TJ
+  ACTION: ENCRYPT
+jobs:
+  ci:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@main
+      with:
+          go-version: 1.16
+    - run: git clone https://github.com/guanzhi/GmSSL.git
+      name: Clone GMSSL
+    - run: cd GmSSL; SYSTEM=`uname -s` ./config --prefix=/usr/local/gmssl; make; sudo make install_sw  
+      name: Config, make and install GMSSL
+    - run: cd interop; go mod vendor
+    - run: cd interop; go test -v util_test.go sm2Interop_test.go tjSM2.go ccsSM2.go pkuSM2.go type.go
+      name: sm2 data interaction check
