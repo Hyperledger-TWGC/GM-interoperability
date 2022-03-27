@@ -1,4 +1,4 @@
-name: ccstjencrypt
+name: sm3
 on:
   pull_request:
   push:
@@ -6,9 +6,6 @@ on:
     - cron: '0 0 * * 3' # https://crontab.guru/#0_0_*_*_3
 env:
   LD_LIBRARY_PATH: /usr/local/gmssl/lib
-  SOURCE: CCS
-  TARGET: TJ
-  ACTION: ENCRYPT
 jobs:
   ci:
     runs-on: ubuntu-18.04
@@ -22,5 +19,5 @@ jobs:
     - run: cd GmSSL; SYSTEM=`uname -s` ./config --prefix=/usr/local/gmssl; make; sudo make install_sw  
       name: Config, make and install GMSSL
     - run: cd interop; go mod vendor
-    - run: cd interop; go test -v util_test.go sm2Interop_test.go tjSM2.go ccsSM2.go pkuSM2.go type.go
-      name: sm2 data interaction check
+    - run: cd interop; go test -v util_test.go sm3Interop_test.go
+      name: sm3 data interaction check
