@@ -18,7 +18,7 @@ jobs:
     steps:
     - script: cd $(Pipeline.Workspace); git clone https://github.com/guanzhi/GmSSL.git
       displayName: Clone GMSSL
-    - script: cd $(Pipeline.Workspace)/GmSSL; SYSTEM=`uname -s` ./config --prefix=/usr/local/gmssl; make; sudo make install_sw  
+    - script: cd $(Pipeline.Workspace)/GmSSL; git checkout master; SYSTEM=`uname -s` ./config --prefix=/usr/local/gmssl; make; sudo make install_sw  
       displayName: Config, make and install GMSSL
     - checkout: self
     - task: GoTool@0
@@ -86,7 +86,7 @@ jobs:
     steps:
     - script: cd $(Pipeline.Workspace); git clone https://github.com/guanzhi/GmSSL.git
       displayName: Clone GMSSL
-    - script: cd $(Pipeline.Workspace)/GmSSL; SYSTEM=`uname -s` ./config --prefix=/usr/local/gmssl; make; sudo make install_sw  
+    - script: cd $(Pipeline.Workspace)/GmSSL; git checkout master; SYSTEM=`uname -s` ./config --prefix=/usr/local/gmssl; make; sudo make install_sw  
       displayName: Config, make and install GMSSL
     - checkout: self
     - task: GoTool@0
