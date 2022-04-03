@@ -1,11 +1,14 @@
 module github.com/Hyperledger-TWGC/fabric-gm-plugins/interop
 
-go 1.14
+go 1.18
 
 require (
-	github.com/Hyperledger-TWGC/ccs-gm v0.1.2-0.20210509122023-bb34670d0124
+	github.com/Hyperledger-TWGC/ccs-gm v1.0.0
 	github.com/Hyperledger-TWGC/pku-gm v1.0.1
 	github.com/Hyperledger-TWGC/tjfoc-gm v1.4.0
-	golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83 // indirect
-	golang.org/x/sys v0.0.0-20210227040730-b0d1d43c014d // indirect
+)
+
+require (
+	golang.org/x/crypto v0.0.0-20220214200702-86341886e292 // indirect
+	golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1 // indirect
 )

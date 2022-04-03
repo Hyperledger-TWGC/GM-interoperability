@@ -1,13 +1,24 @@
-name: sm3
-on:
-  pull_request:
-  push:
-  schedule:
-    - cron: '0 0 * * 3' # https://crontab.guru/#0_0_*_*_3
+name: basicCI
+
+on: 
+  workflow_call:
+    inputs:
+      SOURCE: 
+        required: true
+        type: string
+      TARGET: 
+        required: true
+        type: string
+      ACTION:
+        required: true
+        type: string
+
 env:
   LD_LIBRARY_PATH: /usr/local/gmssl/lib
+
 jobs:
-  sm3Interop_test:
+  sm2Interop_test:
+    name: CI for interop
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v2
@@ -25,8 +36,9 @@ jobs:
       working-directory: GMSSL
     - run: sudo make install_sw
       working-directory: GMSSL
+      name: Config, make and install GMSSL
     - run: go mod vendor
       working-directory: interop
-    - run: go test -v util_test.go sm3Interop_test.go
+    - run: export ACTION=${{ inputs.ACTION }};export TARGET=${{ inputs.TARGET }};export SOURCE=${{ inputs.SOURCE }}; go test -v util_test.go sm2Interop_test.go tjSM2.go ccsSM2.go pkuSM2.go type.go
       working-directory: interop
-      name: sm3 data interaction check
+      name: sm2 data interaction check
