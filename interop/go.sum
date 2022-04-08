@@ -2,8 +2,8 @@ cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMT
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/Hyperledger-TWGC/ccs-gm v1.0.0 h1:AGddK+026TtKcvhaI7apzr68opGKMVWxr8StIcviMLQ=
 github.com/Hyperledger-TWGC/ccs-gm v1.0.0/go.mod h1:PI8nz8Zbf0aA4zXaAVlwTq2eSNNmR5XpQoKpVYVa46s=
-github.com/Hyperledger-TWGC/pku-gm v1.0.1 h1:rrnNTJOiysgwEFuBAycDzsQ2PfEaIR0Kx9drKozhLM8=
-github.com/Hyperledger-TWGC/pku-gm v1.0.1/go.mod h1:j9V7pWBTWFEq7NBBzyD+ZqbFRSe1+fO4gpRkIgltn0k=
+github.com/Hyperledger-TWGC/pku-gm v1.0.2 h1:Nq1bw7SmMztUu1MR6/+AJEDNw7hYhxlI2DQNK7FLNds=
+github.com/Hyperledger-TWGC/pku-gm v1.0.2/go.mod h1:EpKNo3ddCMXqaFT5zt7DCC8XLvigyK+b30n1LiZHPEs=
 github.com/Hyperledger-TWGC/tjfoc-gm v1.4.0 h1:fYkf2oSzYFLfqnyl3VHW+KIs0lNAYQWjsLMS3v56q7I=
 github.com/Hyperledger-TWGC/tjfoc-gm v1.4.0/go.mod h1:pjo29FaEP0cii6emm2Lw/+3UZxO2SGQrUXntmKUD37U=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
