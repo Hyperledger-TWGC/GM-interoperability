@@ -1,13 +1,12 @@
-name: TJPKUsign
+name: tjPKUsm4test
 on:
   pull_request:
   push:
   schedule:
     - cron: '0 0 * * 3' # https://crontab.guru/#0_0_*_*_3
 jobs:
-  TJPKUsign:
-    uses: ./.github/workflows/basicCI.yml
+  tjPKUsm4test:
+    uses: ./.github/workflows/basicCIsm4.yml
     with:
       SOURCE: TJ
       TARGET: PKU
-      ACTION: SIGN

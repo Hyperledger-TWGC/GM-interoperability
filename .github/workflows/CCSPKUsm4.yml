@@ -1,0 +1,12 @@
+name: ccsPKUsm4test
+on:
+  pull_request:
+  push:
+  schedule:
+    - cron: '0 0 * * 3' # https://crontab.guru/#0_0_*_*_3
+jobs:
+  ccsPKUsm4test:
+    uses: ./.github/workflows/basicCIsm4.yml
+    with:
+      SOURCE: CCS
+      TARGET: PKU
