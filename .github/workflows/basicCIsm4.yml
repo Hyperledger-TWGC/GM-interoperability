@@ -1,0 +1,41 @@
+name: basicCI
+
+on: 
+  workflow_call:
+    inputs:
+      SOURCE: 
+        required: true
+        type: string
+      TARGET: 
+        required: true
+        type: string
+
+env:
+  LD_LIBRARY_PATH: /usr/local/gmssl/lib
+
+jobs:
+  sm2Interop_test:
+    name: CI for interop
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@main
+      with:
+          go-version: 1.18
+    - uses: actions/checkout@main
+      with:
+          repository: guanzhi/GmSSL
+          path: GMSSL
+          ref: master
+    - run: SYSTEM=`uname -s` ./config --prefix=/usr/local/gmssl;
+      working-directory: GMSSL
+    - run: make
+      working-directory: GMSSL
+    - run: sudo make install_sw
+      working-directory: GMSSL
+      name: Config, make and install GMSSL
+    - run: go mod vendor
+      working-directory: interop
+    - run: export TARGET=${{ inputs.TARGET }};export SOURCE=${{ inputs.SOURCE }}; go test -v sm4Interop_test.go
+      working-directory: interop
+      name: sm4 data interaction check

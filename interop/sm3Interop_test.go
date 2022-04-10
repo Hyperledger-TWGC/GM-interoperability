@@ -9,7 +9,7 @@ import (
 	tj "github.com/Hyperledger-TWGC/tjfoc-gm/sm3"
 )
 
-const base_format = "2006-01-02 15:04:05"
+var base_format = "2006-01-02 15:04:05"
 
 func TestSM3(t *testing.T) {
 	// generate a random string as data
@@ -21,11 +21,11 @@ func TestSM3(t *testing.T) {
 	ccs_digest := ccs.SumSM3(msg)
 	sm3hash := pku.New()
 	sm3hash.Write(msg)
-	pku_digest:=sm3hash.Sum(nil)
-	if string(tj_digest)!=string(ccs_digest){
+	pku_digest := sm3hash.Sum(nil)
+	if string(tj_digest) != string(ccs_digest) {
 		t.Error("error, tj digest doesn't equal with ccs digest")
 	}
-	if string(ccs_digest)!=string(pku_digest){
+	if string(ccs_digest) != string(pku_digest) {
 		t.Error("error, ccs digest doesn't equal with pku digest")
 	}
 }
