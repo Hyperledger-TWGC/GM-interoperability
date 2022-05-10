@@ -5,9 +5,10 @@ import (
 	"crypto/cipher"
 	"encoding/hex"
 	"fmt"
-	"github.com/Hyperledger-TWGC/tjfoc-gm/sm4"
 	"log"
 	"testing"
+
+	"github.com/Hyperledger-TWGC/tjfoc-gm/sm4"
 )
 
 /**
@@ -47,7 +48,7 @@ func sm4Encrypt(key, iv, plainText []byte) ([]byte, error) {
 		return nil, err
 	}
 	blockSize := block.BlockSize()
-	origData := pkcs7Padding(plainText, blockSize)
+	origData := pkcs7PaddingTJ(plainText, blockSize)
 	blockMode := cipher.NewCBCEncrypter(block, iv)
 	cryted := make([]byte, len(origData))
 	blockMode.CryptBlocks(cryted, origData)
@@ -62,12 +63,12 @@ func sm4Decrypt(key, iv, cipherText []byte) ([]byte, error) {
 	blockMode := cipher.NewCBCDecrypter(block, iv)
 	origData := make([]byte, len(cipherText))
 	blockMode.CryptBlocks(origData, cipherText)
-	origData = pkcs7UnPadding(origData)
+	origData = pkcs7UnPaddingTJ(origData)
 	return origData, nil
 }
 
 // pkcs7填充
-func pkcs7Padding(src []byte, blockSize int) []byte {
+func pkcs7PaddingTJ(src []byte, blockSize int) []byte {
 	padding := blockSize - len(src)%blockSize
 	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
 	return append(src, padtext...)
@@ -75,10 +76,10 @@ func pkcs7Padding(src []byte, blockSize int) []byte {
 
 // pkcs5填充
 func pkcs5Padding(src []byte, blockSize int) []byte {
-	return pkcs7Padding(src, 8)
+	return pkcs7PaddingTJ(src, 8)
 }
 
-func pkcs7UnPadding(src []byte) []byte {
+func pkcs7UnPaddingTJ(src []byte) []byte {
 	length := len(src)
 	if length == 0 {
 		return src

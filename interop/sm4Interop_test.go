@@ -41,74 +41,114 @@ func TestSM4(t *testing.T) {
 
 	var ecbMsg []byte
 	var ecbDec []byte
+	var cbcMsg []byte
+	var cbcDec []byte
 	var err error
+	//iv := randomIV()
 	// lib a encrypt
-	if sourceDef == "TJ" {
-		ecbMsg, err = tj.Sm4Ecb(key, msg, true)
-		if err != nil {
-			t.Errorf("sm4 enc error:%s", err)
-			return
-		}
-	}
-	if sourceDef == "CCS" {
-		ecbMsg, err = ccs.Sm4Ecb(key, msg, ccs.ENC)
-		if err != nil {
-			t.Errorf("sm4 enc error:%s", err)
-			return
-		}
-	}
-	if sourceDef == "PKU" {
-		//ecbMsg
-		inData := pkcs7Padding(msg)
-		ecbMsg = make([]byte, len(inData))
-		//loop for each 16 bytes of msg
-		for i := 0; i < len(inData)/16; i++ {
-			TempMsg, err := pku.CipherECBenc(inData[i*16:(i+1)*16], key)
+	switch sourceDef {
+	case "TJ":
+		{
+			ecbMsg, err = tj.Sm4Ecb(key, msg, true)
 			if err != nil {
 				t.Errorf("sm4 enc error:%s", err)
 				return
 			}
-			//append into ecbMsg
-			copy(ecbMsg[i*16:i*16+16], TempMsg)
+			cbcMsg, err = tj.Sm4Cbc(key, msg, true)
+			if err != nil {
+				t.Errorf("sm4 enc error:%s", err)
+				return
+			}
 		}
-
+	case "CCS":
+		{
+			ecbMsg, err = ccs.Sm4Ecb(key, msg, ccs.ENC)
+			if err != nil {
+				t.Errorf("sm4 enc error:%s", err)
+				return
+			}
+			cbcMsg, err = ccs.Sm4Cbc(key, msg, ccs.ENC)
+			if err != nil {
+				t.Errorf("sm4 enc error:%s", err)
+				return
+			}
+		}
+	case "PKU":
+		{
+			//ecbMsg
+			inData := pkcs7Padding(msg)
+			ecbMsg = make([]byte, len(inData))
+			//loop for each 16 bytes of msg
+			for i := 0; i < len(inData)/16; i++ {
+				TempMsg, err := pku.CipherECBenc(inData[i*16:(i+1)*16], key)
+				if err != nil {
+					t.Errorf("sm4 enc error:%s", err)
+					return
+				}
+				//append into ecbMsg
+				copy(ecbMsg[i*16:i*16+16], TempMsg)
+			}
+			// cbcMsg
+		}
+	default:
+		t.Errorf("unsupported")
 	}
-	fmt.Printf("ecbMsg = %x\n", ecbMsg)
-	fmt.Println(ecbMsg)
 	// lib b decrypt
-	if targetDef == "TJ" {
-		ecbDec, err = tj.Sm4Ecb(key, ecbMsg, false)
-		if err != nil {
-			t.Errorf("sm4 dec error:%s", err)
-			return
-		}
-	}
-	if targetDef == "CCS" {
-		ecbDec, err = ccs.Sm4Ecb(key, ecbMsg, ccs.DEC)
-		if err != nil {
-			t.Errorf("sm4 dec error:%s", err)
-			return
-		}
-	}
-	if targetDef == "PKU" {
-		ecbDec = make([]byte, len(ecbMsg))
-		for i := 0; i < len(ecbMsg)/16; i++ {
-			in_tmp := ecbMsg[i*16 : i*16+16]
-			out_tmp := make([]byte, 16)
-			out_tmp, err = pku.CipherECBdec(in_tmp, key)
+	switch targetDef {
+	case "TJ":
+		{
+			ecbDec, err = tj.Sm4Ecb(key, ecbMsg, false)
 			if err != nil {
 				t.Errorf("sm4 dec error:%s", err)
 				return
 			}
-			copy(ecbDec[i*16:(i+1)*16], out_tmp)
+			cbcDec, err = tj.Sm4Cbc(key, cbcMsg, false)
+			if err != nil {
+				t.Errorf("sm4 enc error:%s", err)
+				return
+			}
 		}
-		ecbDec, _ = pkcs7UnPadding(ecbDec)
+	case "CCS":
+		{
+			ecbDec, err = ccs.Sm4Ecb(key, ecbMsg, ccs.DEC)
+			if err != nil {
+				t.Errorf("sm4 dec error:%s", err)
+				return
+			}
+			cbcDec, err = ccs.Sm4Cbc(key, cbcMsg, ccs.DEC)
+			if err != nil {
+				t.Errorf("sm4 dec error:%s", err)
+				return
+			}
+		}
+	case "PKU":
+		{
+			ecbDec = make([]byte, len(ecbMsg))
+			for i := 0; i < len(ecbMsg)/16; i++ {
+				in_tmp := ecbMsg[i*16 : i*16+16]
+				out_tmp := make([]byte, 16)
+				out_tmp, err = pku.CipherECBdec(in_tmp, key)
+				if err != nil {
+					t.Errorf("sm4 dec error:%s", err)
+					return
+				}
+				copy(ecbDec[i*16:(i+1)*16], out_tmp)
+			}
+			ecbDec, _ = pkcs7UnPadding(ecbDec)
+		}
+	default:
+		t.Errorf("unsupported")
 	}
 	fmt.Printf("ecbDec = %x\n", ecbDec)
 	fmt.Println(ecbDec)
 	// compare
 	if string(msg) != string(ecbDec) {
-		t.Errorf("sm4 enc and dec failed")
+		t.Errorf("sm4 enc and dec failed for ecb mode")
+	}
+	if sourceDef != "PKU" && targetDef != "PKU" {
+		if string(msg) != string(cbcDec) {
+			t.Errorf("sm4 enc and dec failed for cbc mode")
+		}
 	}
 }
 
@@ -134,3 +174,11 @@ func pkcs7UnPadding(src []byte) ([]byte, error) {
 
 	return src[:(length - unpadding)], nil
 }
+
+/*
+func randomIV() []byte {
+	ivlen, _ := pku.GetCipherIVLength(pku.SMS4)
+	iv, _ := pku.GenerateRandom(ivlen)
+	return iv
+}
+*/
