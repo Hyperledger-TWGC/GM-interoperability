@@ -102,10 +102,12 @@ func TestSM4(t *testing.T) {
 				t.Errorf("sm4 dec error:%s", err)
 				return
 			}
-			cbcDec, err = tj.Sm4Cbc(key, cbcMsg, false)
-			if err != nil {
-				t.Errorf("sm4 enc error:%s", err)
-				return
+			if cbcMsg != nil {
+				cbcDec, err = tj.Sm4Cbc(key, cbcMsg, false)
+				if err != nil {
+					t.Errorf("sm4 enc error:%s", err)
+					return
+				}
 			}
 		}
 	case "CCS":
@@ -115,10 +117,12 @@ func TestSM4(t *testing.T) {
 				t.Errorf("sm4 dec error:%s", err)
 				return
 			}
-			cbcDec, err = ccs.Sm4Cbc(key, cbcMsg, ccs.DEC)
-			if err != nil {
-				t.Errorf("sm4 dec error:%s", err)
-				return
+			if cbcMsg != nil {
+				cbcDec, err = ccs.Sm4Cbc(key, cbcMsg, ccs.DEC)
+				if err != nil {
+					t.Errorf("sm4 dec error:%s", err)
+					return
+				}
 			}
 		}
 	case "PKU":
